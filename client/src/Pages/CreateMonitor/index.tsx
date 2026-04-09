@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import { HeaderDeleteControls } from "@/Components/monitors";
 import { GeoContinents } from "@/Types/GeoCheck";
 
@@ -758,6 +758,92 @@ const CreateMonitorPage = () => {
 											))}
 										</Stack>
 									)}
+								</Stack>
+							);
+						}}
+					/>
+				}
+			/>
+
+			<ConfigBox
+				title="Escalated Notifications"
+				subtitle="Configure notifications that trigger after an incident has been ongoing for a specified duration"
+				rightContent={
+					<Controller
+						name="escalations"
+						control={control}
+						render={({ field }) => {
+							const escalationList = field.value ?? [];
+							return (
+								<Stack spacing={theme.spacing(LAYOUT.MD)}>
+									{escalationList.map((escalation, index) => (
+										<Stack
+											key={index}
+											direction="row"
+											spacing={theme.spacing(LAYOUT.SM)}
+											alignItems="center"
+										>
+											<TextField
+												value={escalation.delayMinutes}
+												onChange={(e) => {
+													const newEscalations = [...escalationList];
+													newEscalations[index].delayMinutes =
+														Number(e.target.value) || 0;
+													field.onChange(newEscalations);
+												}}
+												type="number"
+												fieldLabel="Delay (minutes)"
+												placeholder="30"
+												fullWidth={false}
+												sx={{ width: 150 }}
+											/>
+											<Select
+												value={escalation.notificationId}
+												onChange={(e) => {
+													const newEscalations = [...escalationList];
+													newEscalations[index].notificationId = e.target.value;
+													field.onChange(newEscalations);
+												}}
+												fieldLabel="Notification"
+												sx={{ minWidth: 200 }}
+											>
+												<MenuItem value="">Select notification</MenuItem>
+												{notifications?.map((notification) => (
+													<MenuItem
+														key={notification.id}
+														value={notification.id}
+													>
+														{notification.notificationName}
+													</MenuItem>
+												))}
+											</Select>
+											<IconButton
+												size="small"
+												onClick={() => {
+													const newEscalations = escalationList.filter(
+														(_, i) => i !== index
+													);
+													field.onChange(newEscalations);
+												}}
+												aria-label="Remove escalation"
+											>
+												<Trash2 size={16} />
+											</IconButton>
+										</Stack>
+									))}
+									<Button
+										variant="outlined"
+										startIcon={<Plus size={16} />}
+										onClick={() => {
+											const newEscalations = [
+												...escalationList,
+												{ delayMinutes: 30, notificationId: "" },
+											];
+											field.onChange(newEscalations);
+										}}
+									>
+										Add Escalation
+									</Button>
 								</Stack>
 							);
 						}}
