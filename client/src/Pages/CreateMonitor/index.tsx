@@ -18,7 +18,7 @@ import { Trash2, Plus } from "lucide-react";
 import { HeaderDeleteControls } from "@/Components/monitors";
 import { GeoContinents } from "@/Types/GeoCheck";
 
-import { BasePage, ConfigBox } from "@/Components/design-elements";
+import { BasePage, ConfigBox, Icon } from "@/Components/design-elements";
 import {
 	RadioWithDescription,
 	Button,
@@ -766,8 +766,8 @@ const CreateMonitorPage = () => {
 			/>
 
 			<ConfigBox
-				title="Escalated Notifications"
-				subtitle="Configure notifications that trigger after an incident has been ongoing for a specified duration"
+				title={t("pages.createMonitor.form.escalations.title")}
+				subtitle={t("pages.createMonitor.form.escalations.description")}
 				rightContent={
 					<Controller
 						name="escalations"
@@ -792,10 +792,14 @@ const CreateMonitorPage = () => {
 													field.onChange(newEscalations);
 												}}
 												type="number"
-												fieldLabel="Delay (minutes)"
-												placeholder="30"
+												fieldLabel={t(
+													"pages.createMonitor.form.escalations.option.delayMinutes.label"
+												)}
+												placeholder={t(
+													"pages.createMonitor.form.escalations.option.delayMinutes.placeholder"
+												)}
 												fullWidth={false}
-												sx={{ width: 150 }}
+												sx={{ width: theme.spacing(LAYOUT.XL) }}
 											/>
 											<Select
 												value={escalation.notificationId}
@@ -804,10 +808,16 @@ const CreateMonitorPage = () => {
 													newEscalations[index].notificationId = e.target.value;
 													field.onChange(newEscalations);
 												}}
-												fieldLabel="Notification"
-												sx={{ minWidth: 200 }}
+												fieldLabel={t(
+													"pages.createMonitor.form.escalations.option.notification.label"
+												)}
+												sx={{ minWidth: theme.spacing(LAYOUT.XXL) }}
 											>
-												<MenuItem value="">Select notification</MenuItem>
+												<MenuItem value="">
+													{t(
+														"pages.createMonitor.form.escalations.option.notification.placeholder"
+													)}
+												</MenuItem>
 												{notifications?.map((notification) => (
 													<MenuItem
 														key={notification.id}
@@ -825,15 +835,17 @@ const CreateMonitorPage = () => {
 													);
 													field.onChange(newEscalations);
 												}}
-												aria-label="Remove escalation"
+												aria-label={t(
+													"pages.createMonitor.form.escalations.option.removeLabel"
+												)}
 											>
-												<Trash2 size={16} />
+												<Icon icon={Trash2} />
 											</IconButton>
 										</Stack>
 									))}
 									<Button
 										variant="outlined"
-										startIcon={<Plus size={16} />}
+										startIcon={<Icon icon={Plus} />}
 										onClick={() => {
 											const newEscalations = [
 												...escalationList,
@@ -842,7 +854,7 @@ const CreateMonitorPage = () => {
 											field.onChange(newEscalations);
 										}}
 									>
-										Add Escalation
+										{t("pages.createMonitor.form.escalations.option.addButton")}
 									</Button>
 								</Stack>
 							);
